@@ -16,7 +16,7 @@ export AIRFLOW_HOME=~/airflow
 
 ```bash
 # install from pypi using pip
-pip install apache-airflow
+pip install apache-airflow[postgres]
 
 # initialize the database
 airflow initdb
@@ -53,6 +53,16 @@ cp -R ./etl-example/dags/* $AIRFLOW_HOME/dags
 mkdir $AIRFLOW_HOME/sql
 cp ./etl-example/sql/*.sql $AIRFLOW_HOME/sql
 ```
+
+### Config Airflow
+
+1. Go to the connections screen in the UI (through Admin) 
+2. create a new postgres connection *postgres_oltp*. 
+    - Then specify conntype=Postgres, Schema=orders, login=oltp_read (same password) and port 5432 or whatever you’re using.
+3. add another connection for Postgres - *postgres_dwh*
+    - conntype=Postgres, Schema=dwh, login=dwh_svc_account (same password) and port 5432.
+4. Add a pool to airflow (also under Admin) - *postgres_dwh*. Let’s give this a value of 10.
+5. add a Variable - *sql_path*: set the value to the sql directory
 
 ## Run Airflow from Docker
 
